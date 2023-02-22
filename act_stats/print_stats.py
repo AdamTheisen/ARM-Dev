@@ -2,8 +2,8 @@ import os
 from github import Github
 
 
-#token = os.getenv('GITHUB_TOKEN')
-token = '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'
+token = os.getenv('GITHUB_TOKEN')
+
 g = Github(token)
 repo = g.get_repo('ARM-DOE/ACT')
 clones = repo.get_clones_traffic(per='day')

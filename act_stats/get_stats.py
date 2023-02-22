@@ -2,8 +2,7 @@ import os
 from github import Github
 import datetime as dt
 
-#token = os.getenv('GITHUB_TOKEN')
-token = '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'
+token = os.getenv('GITHUB_TOKEN')
 
 g = Github(token)
 repo = g.get_repo('ARM-DOE/ACT')
@@ -31,6 +30,6 @@ for i in range(len(views['views'])):
 #a = ','.join([str(clones['clones'][idx].timestamp), str(clones['clones'][idx].count), str(clones['clones'][idx].uniques),
 #              str(views['views'][idx].count),  str(views['views'][idx].uniques)])
 
-f = open('/home/theisen/Code/act_stats/act_stats.txt', 'a')
+f = open('/home/theisen/Code/ARM-Dev/act_stats/act_stats.txt', 'a')
 f.write(a + '\n')
 f.close()
