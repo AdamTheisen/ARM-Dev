@@ -30,6 +30,6 @@ for i in range(len(views['views'])):
 #a = ','.join([str(clones['clones'][idx].timestamp), str(clones['clones'][idx].count), str(clones['clones'][idx].uniques),
 #              str(views['views'][idx].count),  str(views['views'][idx].uniques)])
 
-f = open('/home/theisen/Code/ARM-Dev/act_stats/act_stats.txt', 'a')
+f = open('/home/theisen/Code/ARM-Dev/act_stats/act_stats.csv', 'a')
 f.write(a + '\n')
 f.close()
