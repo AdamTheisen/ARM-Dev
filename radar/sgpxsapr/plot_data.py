@@ -4,11 +4,14 @@ import matplotlib.pyplot as plt
 import os
 import numpy as np
 
-ds = 'sgpxsaprI4.00'
-files = glob.glob('/data/datastream/sgp/' + ds + '/*maint')
+ds = 'sgpxsaprI6.00'
+files = glob.glob('/data/datastream/sgp/' + ds + '/*230601*RAW*')
 
 for f in files:
-    radar = pyart.io.read_sigmet(f)
+    try:
+        radar = pyart.io.read_sigmet(f)
+    except:
+        continue
     el = radar.elevation['data']
 
     display = pyart.graph.RadarDisplay(radar)
@@ -26,7 +29,7 @@ for f in files:
     if radar.scan_type == 'rhi':
         display.set_limits(ylim=[0, 15], ax=ax)
 
-    file_name = '_'.join([scan_type, f.split('.')[-3]]) + '.png'
+    file_name = '_'.join([scan_type, f.split('.')[-2]]) + '.png'
 
     save_dir = '/data/www/userplots/theisen/sgp/' + ds
     if not os.path.exists(save_dir):
