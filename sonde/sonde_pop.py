@@ -7,28 +7,41 @@ import matplotlib.dates as mdates
 import xarray as xr
 import numpy as np
 
-guc_lat = 38.95616
-guc_lon = -106.9879
+#guc_lat = 38.95616
+#guc_lon = -106.9879
+lat = 36.605
+lon = -97.485
+site = 'nsa'
 
-files = glob.glob('/data/archive/guc/gucsondewnpnM1.b1/*cdf')
+files = glob.glob('/data/archive/'+site+'/'+site+'sondewnpnC1.b1/*cdf')
 files.sort()
 sonde = []
 sample = None
-for f in files[11:]:
-    obj = act.io.armfiles.read_netcdf(f)
-    obj = obj.where(obj['time'] == obj['time'].values[-1], drop=True)
-    if sample is None:
-        sample = obj
-    sonde.append(obj)
+ds = None
+for f in files:
+    try:
+        obj = act.io.armfiles.read_netcdf(f)
+        obj = obj.where(obj['time'] == obj['time'].values[-1], drop=True)
+        if obj['lat'].values[0] == -9999 or obj['lon'].values[0] == -9999:
+            continue
+        #if obj['lat'].values[0] > 40. or obj['lat'].values[0] < 30. or obj['lon'].values[0] > -80. or obj['lon'].values[0] < -100:
+        #    print(f)
+        #    continue
+        if sample is None:
+            sample = obj
+        if ds is None:
+            ds = obj
+        else:
+            ds = xr.merge([ds, obj])
+    except:
+        continue
+sample['lat'].values = [lat]
+sample['lon'].values = [lon]
+#ds = xr.merge([ds, sample])
 
-sample['lat'].values = [guc_lat]
-sample['lon'].values = [guc_lon]
-sonde.append(sample)
-
-obj = xr.merge(sonde)
-
-display = act.plotting.GeographicPlotDisplay(obj, figsize=(15,10))
-ax = display.geoplot('lat')
-ax.plot(guc_lon, guc_lat, 'k*', markersize=14)
-
-plt.savefig('/home/theisen/www/guc_sonde_location.png')
+display = act.plotting.GeographicPlotDisplay(ds, figsize=(15,10))
+ax = display.geoplot('time')
+ax.plot(lon, lat, 'k*', markersize=14)
+print(ds['lat'].min())
+print(ds['lon'].min())
+plt.savefig('/data/www/userplots/theisen/'+site+'/'+site+'_sonde_location.png')
