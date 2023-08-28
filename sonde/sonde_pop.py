@@ -9,11 +9,12 @@ import numpy as np
 
 #guc_lat = 38.95616
 #guc_lon = -106.9879
-#lat = 36.605
-#lon = -97.485
-site = 'nsa'
-lat = 71.323
-lon = -156.609
+site = 'sgp'
+lat = 36.605
+lon = -97.485
+#site = 'nsa'
+#lat = 71.323
+#lon = -156.609
 
 files = glob.glob('/data/archive/'+site+'/'+site+'sondewnpnC1.b1/*cdf')
 files.sort()
@@ -26,8 +27,8 @@ for f in files:
         obj = obj.where(obj['time'] == obj['time'].values[-1], drop=True)
         if obj['lat'].values[0] == -9999 or obj['lon'].values[0] == -9999:
             continue
-#        if obj['lat'].values[0] > 40. or obj['lat'].values[0] < 30. or obj['lon'].values[0] > -80. or obj['lon'].values[0] < -100:
-        if obj['lat'].values[0] > 80. or obj['lat'].values[0] < 60. or obj['lon'].values[0] > -140. or obj['lon'].values[0] < -180:
+        if obj['lat'].values[0] > 40. or obj['lat'].values[0] < 30. or obj['lon'].values[0] > -80. or obj['lon'].values[0] < -100:
+#        if obj['lat'].values[0] > 80. or obj['lat'].values[0] < 60. or obj['lon'].values[0] > -140. or obj['lon'].values[0] < -180:
             print(f)
             continue
         if sample is None:
