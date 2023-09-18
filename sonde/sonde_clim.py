@@ -22,10 +22,11 @@ def proc_data(f, variables):
             data[v] = [-9999]
     return data
 
-#files = glob.glob('/data/archive/sgp/sgpsondewnpnC1.b1/*20230801*')
-
 now = pd.Timestamp.now().to_period('m')
-dates = pd.period_range('2001-04-01', now-1, freq='M').strftime('%Y%m').tolist()
+# SGP
+#dates = pd.period_range('2001-04-01', now-1, freq='M').strftime('%Y%m').tolist()
+# NSA
+dates = pd.period_range('2002-04-28', now-1, freq='M').strftime('%Y%m').tolist()
 
 
 bins = np.arange(0, 26000., 500.)
@@ -40,7 +41,7 @@ bin_data['height'] = {'data': bins[0:-1], 'dims': ['height']}
 
 for d in dates:
     print(d)
-    files = glob.glob('/data/archive/sgp/sgpsondewnpnC1.b1/*b1.' + d + '*')
+    files = glob.glob('/data/archive/nsa/nsasondewnpnC1.b1/*b1.' + d + '*')
     if len(files) <= 1:
         continue
     files.sort()
@@ -65,18 +66,18 @@ for d in dates:
     
     try:
         ts = pd.to_datetime(d, format='%Y%m')
-        bin_data['time']['data'] = np.concatenate([bin_data['time']['data'], [ts]])
-        bin_data['count']['data'] = np.concatenate([bin_data['count']['data'], [ct]])
-
         for v in variables[0:]:
             bin_means, bin_edges, bin_number = stats.binned_statistic(dat['alt'], dat[v], bins=bins)
             if len(bin_data[v]['data']) == 0:
                 bin_data[v]['data'] = bin_means
             else:
                 bin_data[v]['data'] = np.vstack([bin_data[v]['data'], bin_means])
+
+        bin_data['time']['data'] = np.concatenate([bin_data['time']['data'], [ts]])
+        bin_data['count']['data'] = np.concatenate([bin_data['count']['data'], [ct]])
     except:
         print('Stats Error with ' + f)
         continue
 
 ds = xr.Dataset.from_dict(bin_data)
-ds.to_netcdf('sgpsondeC1.b1.nc')
+ds.to_netcdf('nsasondeC1.b1.nc')
