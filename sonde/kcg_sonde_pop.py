@@ -32,14 +32,14 @@ if current_days >= 5:
 site = 'kcg'
 clat = -40.6808
 clon = 144.69
-east = clon + 2.2
-west = clon - 1.6
-north = clat + 1.3
-south = clat - 0.9
+east = clon + 4.5
+west = clon - 2.5
+north = clat + 1.5
+south = clat - 3.
 
 for d in dates:
     # Get SONDE Data
-    files = glob.glob('/data/datastream/' + site + '/' + site + 'sondewnpnM1.b1/*.' + d + '*.*.cdf')
+    files = glob.glob('/data/datastream/' + site + '/' + site + 'sondewnpn*1.b1/*.' + d + '*.*.cdf')
     files.sort()
     sonde = []
     sample = None
@@ -63,7 +63,7 @@ for d in dates:
         continue
 
     # Read in shape file and prj file to get the projection.
-    shp = geopandas.read_file("./Marine_Parks/shp_files/MarineParks.shp")
+    shp = geopandas.read_file("/home/theisen/Code/ARM-Dev/sonde/Marine_Parks/shp_files/MarineParks.shp")
 
     # Convert projection from meters to lat/lon
     shp = shp.to_crs(4326)
@@ -94,4 +94,4 @@ for d in dates:
 
     # Save the figure
     plt.tight_layout()
-    plt.savefig('/data/www/userplots/theisen/' + site + '/' + site + '_sonde_location_' + d + '.png')
+    plt.savefig('/data/www/userplots/theisen/' + site + '/kcgsondewnpn/' + site + '_sonde_location_' + d + '.png')
