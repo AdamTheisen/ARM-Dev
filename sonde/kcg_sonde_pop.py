@@ -87,7 +87,7 @@ for d in dates:
     gl.xformatter = LONGITUDE_FORMATTER
     gl.yformatter = LATITUDE_FORMATTER
 
-    cax = ax.scatter(ds['lon'], ds['lat'], c=ds['time'].values, cmap='YlOrRd')
+    cax = ax.scatter(ds['lon'], ds['lat'], c=ds['time'].values, cmap='spring')
     ax.scatter(clon, clat, marker="P", color='y')
     cbar = plt.colorbar(cax)
     cbar.set_label('Time', rotation=270)
