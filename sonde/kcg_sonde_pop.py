@@ -78,7 +78,7 @@ for d in dates:
     ax.add_image(google, 10)
 
     # Plot polygons with geopandas
-    shp.plot(ax=ax, alpha=0.7, color='red', zorder=10)
+    shp.plot(ax=ax, alpha=0.7, color='red', zorder=1)
 
     # Add gridlines
     gl = ax.gridlines(draw_labels=True)
