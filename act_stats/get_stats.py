@@ -25,7 +25,7 @@ for i in range(len(views['views'])):
         else:
             clone_ct = str(0)
             clone_uni = str(0)
-    a = ','.join([str(ts), clone_ct, clone_uni, str(views['views'][idx].count), str(views['views'][idx].uniques)])
+    a = ','.join([str(ts.date()), clone_ct, clone_uni, str(views['views'][idx].count), str(views['views'][idx].uniques)])
 
 #a = ','.join([str(clones['clones'][idx].timestamp), str(clones['clones'][idx].count), str(clones['clones'][idx].uniques),
 #              str(views['views'][idx].count),  str(views['views'][idx].uniques)])

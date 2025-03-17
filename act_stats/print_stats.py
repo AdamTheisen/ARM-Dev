@@ -9,6 +9,7 @@ repo = g.get_repo('ARM-DOE/ACT')
 clones = repo.get_clones_traffic(per='day')
 views = repo.get_views_traffic(per='day')
 
+print(dir(views['views'][0]))
 
 for i in range(len(views['views'])):
     ts = views['views'][i].timestamp
@@ -20,5 +21,5 @@ for i in range(len(views['views'])):
         else:
             clone_ct = str(0)
             clone_uni = str(0)
-    print(','.join([str(views['views'][i].timestamp), clone_ct, clone_uni, str(views['views'][i].count), str(views['views'][i].uniques)]))
+    print(','.join([str(views['views'][i].timestamp.date()), clone_ct, clone_uni, str(views['views'][i].count), str(views['views'][i].uniques)]))
 
