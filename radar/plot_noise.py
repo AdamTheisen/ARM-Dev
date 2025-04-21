@@ -2,7 +2,7 @@ import act
 import radtraq
 import glob
 
-files = glob.glob('/data/archive/hou/houkazrcfrgeM1.a1/*20220524.*')
+files = glob.glob('/data/archive/hou/bnfkazrcfrgeM1.a1/*20250406.*')
 files.sort()
 
 obj = act.io.armfiles.read_netcdf(files)
