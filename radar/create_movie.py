@@ -1,9 +1,9 @@
 import glob
 import act
 
-dates = act.utils.dates_between('20250406', '20250412')
+dates = act.utils.dates_between('20250413', '20250419')
 files = []
-radar = 'bnfkasacr'
+radar = 'bnfcsapr2'
 for d in dates:
     files += glob.glob('/data/www/tool/dq/bnf/'+radar+'/'+ d.strftime('%Y%m%d') + '/images/*ppi*')
 

@@ -8,10 +8,8 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 
-today = dt.today().strftime('%Y%m%d')
-yesterday = (dt.now() - timedelta(days=1)).strftime('%Y%m%d')
 
-files = glob.glob('/data/datastream/crg/crgaosopcmonS2.00/*' + today + '*')
+files = glob.glob('/home/theisen/test/crg*tsv')
 files.sort()
 skip = np.arange(0,34)
 skip = np.append(skip, [35, 36, 37, 38])
@@ -51,53 +49,40 @@ variable = 'sum_counts'
 result = ds.qcfilter.add_delta_test(variable, diff_limit=30)
 ds.qcfilter.datafilter(variable, rm_assessments=['Bad', 'Suspect'], del_qc_var=False)
 
-#for ii, v in enumerate(bin_vars):
-#    if len(data) == 0:
-#        data = ds[v].values
-#    elif ('16' in v):
-#        avg = np.mean(np.vstack([ds['Bin 16'].values, ds['Bin 17'].values]), axis=0)
-#        avg = avg - ds[bin_vars[ii + 2]]
-#        data = np.vstack([data, avg])
-#    elif ('17' in v):
-#        continue
-#    elif ii == len(bin_vars)-1:
-#        data = np.vstack([data, np.zeros(len(ds['time'].values))])
-#    else:
-#        data = np.vstack([data, ds[v].values - ds[bin_vars[ii+1]]])
-
-# Compute dlogDp and geometric bin centers
-#max_column = 32
-#dp_bin = [dp(1:max_column-2), dp(2:max_column-1)]
-#dp_geo = geomean(dp_bin, 2)
-#dlogdp = log10(dp_bin(:,2) ./ dp_bin(:,1))
-#dn = data / 100.
-
 display = act.plotting.TimeSeriesDisplay(ds, figsize=(10,9), subplot_shape=(3,))
-title = 'CRG Monitoring OPC Temperature and RH on ' + today
+title = 'CRG Monitoring OPC Temperature and RH'
 display.plot('Temp_i', subplot_index=(0,), set_title=title)
 display.axes[0].set_ylabel('Temperature (ºC)')
 ax2 = display.axes[0].twinx()
 ax2.plot(ds['time'], ds['rH_i'], color='orange')
 ax2.set_ylabel('Relative Humidity (%)')
 
-title = 'CRG Monitoring OPC Counts on ' + today
+title = 'CRG Monitoring OPC Counts'
 display.plot('counts', subplot_index=(1,), norm=colors.LogNorm(vmin=1., vmax=1000.), set_title=title)
-title = 'CRG Monitoring OPC Sum of Counts on ' + today
+title = 'CRG Monitoring OPC Sum of Counts'
 display.plot('sum_counts', subplot_index=(2,), set_title=title)
 #display.axes[1].pcolormesh(time, diameter_midpoint, data, shading='nearest', norm=colors.LogNorm())
 #display.axes[1].set_ylabel('Diameter Midpoint')
-filename = 'crgaosopcmonS2.00.daily_status.' + today + '.000000.png'
+filename = 'crgaosopcmonS2.00.all_data.000000.png'
 plt.savefig('/data/www/userplots/theisen/crgaosopcmon/' + filename)
 
-
 #----------Wind Rose Plots----------#
-files = glob.glob('/data/datastream/crg/crgmetwxtS2.b1/*' + today +'*.nc')
+files = glob.glob('/data/datastream/crg/crgmetwxtS2.b1/*.202504*.nc')
 ds_met = act.io.read_arm_netcdf(files)
 ds_merge = xr.merge([ds_met.resample(time='1min').nearest(), ds.resample(time='1min').nearest()])
 
 display = act.plotting.WindRoseDisplay(ds_merge)
 display.plot_data('wdir_vec_mean', 'wspd_vec_mean', 'sum_counts', num_dirs=15, plot_type='line', line_plot_calc='mean')
-display.axes[0].set_ylim([0, 20000])
+filename = 'crgaosopcmonS2.00.all_data_rose.000000.png'
+plt.savefig('/data/www/userplots/theisen/crgaosopcmon/' + filename)
 
-filename = 'crgaosopcmonS2.00.data_rose.' + today + '.000000.png'
+
+display = act.plotting.WindRoseDisplay(ds_merge)
+display.plot_data('wdir_vec_mean', 'wspd_vec_mean', 'sum_counts', num_dirs=15, plot_type='contour', contour_type='mean')
+filename = 'crgaosopcmonS2.00.all_data_rose_contour.000000.png'
+plt.savefig('/data/www/userplots/theisen/crgaosopcmon/' + filename)
+
+display = act.plotting.WindRoseDisplay(ds_met)
+display.plot('wdir_vec_mean', 'wspd_vec_mean', spd_bins=[0,5,10,15])
+filename = 'crgaosopcmonS2.00.all_wind_rose.000000.png'
 plt.savefig('/data/www/userplots/theisen/crgaosopcmon/' + filename)
