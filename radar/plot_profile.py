@@ -4,10 +4,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 from act.io.arm import read_arm_netcdf
 
-files = glob.glob('/data/datastream/bnf/bnfkazr2cfrgeM1.a1/*20250411*')
+date = '20250423'
+files = glob.glob('/data/datastream/bnf/bnfkazr2cfrgeM1.a1/*'+date+'*')
 ds = read_arm_netcdf(files)
 
-files = glob.glob('/data/datastream/bnf/bnfkazr2cfrmdM1.a1/*20250411*')
+files = glob.glob('/data/datastream/bnf/bnfkazr2cfrmdM1.a1/*'+date+'*')
 ds_md = read_arm_netcdf(files)
 
 # Resample to 1-minute to simplify processing
@@ -23,7 +24,7 @@ variable = ['reflectivity', 'mean_doppler_velocity']
 
 # Create a grid to interpolate data onto - Needed for different radars
 first_height = 1500.0
-ygrid = np.arange(first_height, 10000, 50)
+ygrid = np.arange(first_height, 5000, 50)
 
 # Calculate average profiles
 ds = radtraq.proc.profile.calc_avg_profile(
@@ -42,7 +43,7 @@ rad_dict = {
 display = radtraq.plotting.plot_avg_profile(rad_dict)
 
 # Show plot
-plt.savefig('/data/www/userplots/theisen/bnfkazr/20250411_profile.png')
+plt.savefig('/data/www/userplots/theisen/bnfkazr/'+date+'_profile.png')
 
 # Close out object
 ds.close()
