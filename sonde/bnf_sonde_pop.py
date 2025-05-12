@@ -16,7 +16,7 @@ import sys
 from datetime import datetime as dt
 from datetime import timedelta
 
-dates = act.utils.dates_between('20250413', '20250419')
+dates = act.utils.dates_between('20250427', '20250503')
 dates = [d.strftime('%Y%m%d') for d in dates]
 # Set up our limits for the image centering on central latitude and longitude
 site = 'bnf'
