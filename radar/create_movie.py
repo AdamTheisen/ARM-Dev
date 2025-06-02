@@ -1,7 +1,7 @@
 import glob
 import act
 
-dates = act.utils.dates_between('20250427', '20250503')
+dates = act.utils.dates_between('20250518', '20250524')
 files = []
 radar = 'bnfcsapr2'
 for d in dates:
