@@ -1,4 +1,3 @@
-""" Creates a image of the Marine Parks. """
 import cartopy.crs as ccrs
 import cartopy.io.img_tiles as cimgt
 from cartopy.io.shapereader import Reader
@@ -28,18 +27,20 @@ current_days = dt.now().day
 if current_days >= 5:
     dates = [dates[0]]
 
+dates = [str(current_year)]
+
 # Set up our limits for the image centering on central latitude and longitude
 site = 'nsa'
 clat = 71.323
 clon = -156.615
-east = clon + 7.0
+east = clon + 8.0
 west = clon - 2.5
 north = clat + 1.5
 south = clat - 3.
 
 for d in dates:
     # Get SONDE Data
-    files = glob.glob('/data/datastream/' + site + '/' + site + 'sondewnpn*1.b1/*.' + d + '*.*.cdf')
+    files = glob.glob('/data/archive/' + site + '/' + site + 'sondewnpn*1.b1/*.' + d + '*.*.cdf')
     files.sort()
     sonde = []
     sample = None
