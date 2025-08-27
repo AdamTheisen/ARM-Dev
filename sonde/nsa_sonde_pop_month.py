@@ -1,19 +1,12 @@
 import cartopy.crs as ccrs
 import cartopy.io.img_tiles as cimgt
-from cartopy.io.shapereader import Reader
-from cartopy.feature import ShapelyFeature
 from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 
-import geopandas
 import matplotlib.pyplot as plt
-import osgeo.osr as osr
 import glob
 import act
 import xarray as xr
-import numpy as np
-import sys
 from datetime import datetime as dt
-from datetime import timedelta
 
 current_month = dt.now().month
 current_year = dt.now().year
@@ -27,7 +20,7 @@ current_days = dt.now().day
 if current_days >= 5:
     dates = [dates[0]]
 
-dates = [str(current_year)]
+dates = [str(current_year) + str(current_month).zfill(2)]
 
 # Set up our limits for the image centering on central latitude and longitude
 site = 'nsa'
@@ -63,23 +56,14 @@ for d in dates:
     if ds is None:
         continue
 
-    # Read in shape file and prj file to get the projection.
-    shp = geopandas.read_file("/home/theisen/Code/ARM-Dev/sonde/Marine_Parks/shp_files/MarineParks.shp")
-
-    # Convert projection from meters to lat/lon
-    shp = shp.to_crs(4326)
-
     # Set extents to match limits
     fig = plt.figure(figsize=(14, 8))
     ax = plt.axes(projection=ccrs.PlateCarree())
     ax.set_extent([west, east, south, north], ccrs.PlateCarree())
 
     # Grab google satellite background
-    google = cimgt.GoogleTiles(style='satellite', cache=True)
+    google = cimgt.GoogleTiles(style='satellite')
     ax.add_image(google, 10)
-
-    # Plot polygons with geopandas
-    shp.plot(ax=ax, alpha=0.7, color='red', zorder=1)
 
     # Add gridlines
     gl = ax.gridlines(draw_labels=True)
@@ -93,6 +77,12 @@ for d in dates:
     cbar = plt.colorbar(cax)
     cbar.set_label('Time', rotation=270)
 
+    plt.title(site.upper() + ' Radiosonde Termination Locations for ' + str(current_month) + '-' + str(current_year))
+
     # Save the figure
     plt.tight_layout()
     plt.savefig('/data/www/userplots/theisen/' + site + '/' + site + 'sondewnpn/' + site + '_sonde_location_' + d + '.png')
+
+    variables = ['lat', 'lon']
+    df = ds[variables].to_dataframe()
+    df.to_csv('/home/theisen/Code/ARM-Dev/sonde/data/nsasonde/' + site + '_sonde_location_' + d + '.csv')
