@@ -16,7 +16,7 @@ import sys
 from datetime import datetime as dt
 from datetime import timedelta
 
-dates = act.utils.dates_between('20250701', '20250731')
+dates = act.utils.dates_between('20250801', '20250831')
 dates = [d.strftime('%Y%m%d') for d in dates]
 # Set up our limits for the image centering on central latitude and longitude
 site = 'crg'
@@ -78,8 +78,9 @@ gl.right_labels = False
 gl.xformatter = LONGITUDE_FORMATTER
 gl.yformatter = LATITUDE_FORMATTER
 
-cax = ax.scatter(ds['lon'], ds['lat'], c=ds['time'].values, cmap='spring')
 ax.scatter(clon, clat, marker="P", color='y')
+ax.scatter(-75.4684045628874, 39.126247476923595, marker=">", color='r')
+cax = ax.scatter(ds['lon'], ds['lat'], c=ds['time'].values, cmap='spring')
 cbar = plt.colorbar(cax)
 cbar.set_label('Time', rotation=270)
 
